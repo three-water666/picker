@@ -215,6 +215,8 @@ export default function Popup<DateType extends object = any>(props: PopupProps<D
   if (range) {
     const realPlacement = getRealPlacement(alignedPlacement || placement, rtl);
     const offsetUnit = getoffsetUnit(realPlacement, rtl);
+    console.log('arrow', offsetUnit, activeOffset);
+    console.log('realPlacement', realPlacement);
     renderNode = (
       <div
         onMouseDown={onPanelMouseDown}

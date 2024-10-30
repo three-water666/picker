@@ -101,14 +101,15 @@ function PickerTrigger({
       stretch="minWidth"
       getPopupContainer={getPopupContainer}
       onPopupAlign={(_, align) => {
+        console.log('align', align);
         if (!setAlignedPlacement) return;
-        
+
         const matchedKey = Object.keys(BUILT_IN_PLACEMENTS).find(
           (key) =>
             BUILT_IN_PLACEMENTS[key].points[0] === align.points[0] &&
-            BUILT_IN_PLACEMENTS[key].points[1] === align.points[1]
+            BUILT_IN_PLACEMENTS[key].points[1] === align.points[1],
         );
-        
+
         if (matchedKey) {
           setAlignedPlacement(matchedKey);
         }

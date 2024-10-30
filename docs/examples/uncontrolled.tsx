@@ -23,7 +23,7 @@ export default () => (
         locale={zhCN}
         picker="week"
         allowClear
-        open
+        // open
         onOpenChange={(open) => {
           console.log('2 =>', open);
         }}

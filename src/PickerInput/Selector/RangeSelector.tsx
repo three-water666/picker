@@ -186,19 +186,25 @@ function RangeSelector<DateType extends object = any>(
     if (input) {
       const { offsetWidth, offsetLeft, offsetParent } = input.nativeElement;
       const parentWidth = (offsetParent as HTMLElement)?.offsetWidth || 0;
+      console.log(parentWidth, offsetWidth, offsetLeft);
       const activeOffset = placementRight ? parentWidth - offsetWidth - offsetLeft : offsetLeft;
-      setActiveBarStyle((ori) => ({
-        ...ori,
-        width: offsetWidth,
-        [offsetUnit]: activeOffset,
-      }));
+      console.log('activeBar', offsetUnit, activeOffset);
+      console.log('realPlacement', realPlacement);
+      setActiveBarStyle((ori) => {
+        const { insetInlineStart, insetInlineEnd, ...restOri } = ori;
+        return {
+          ...restOri,
+          width: offsetWidth,
+          [offsetUnit]: activeOffset,
+        };
+      });
       onActiveOffset(activeOffset);
     }
   });
 
   React.useEffect(() => {
     syncActiveOffset();
-  }, [activeIndex]);
+  }, [activeIndex, alignedPlacement]);
 
   // ======================== Clear =========================
   const showClear = clearIcon && ((value[0] && !disabled[0]) || (value[1] && !disabled[1]));
