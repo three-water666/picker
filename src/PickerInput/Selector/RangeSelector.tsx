@@ -120,7 +120,7 @@ function RangeSelector<DateType extends object = any>(
   const rtl = direction === 'rtl';
 
   // ======================== Prefix ========================
-  const { prefixCls } = React.useContext(PickerContext);
+  const { prefixCls, alignedPlacement } = React.useContext(PickerContext);
 
   // ========================== Id ==========================
   const ids = React.useMemo(() => {
@@ -173,7 +173,7 @@ function RangeSelector<DateType extends object = any>(
   });
 
   // ====================== ActiveBar =======================
-  const realPlacement = getRealPlacement(placement, rtl);
+  const realPlacement = getRealPlacement(alignedPlacement || placement, rtl);
   const offsetUnit = getoffsetUnit(realPlacement, rtl);
   const placementRight = realPlacement?.toLowerCase().endsWith('right');
   const [activeBarStyle, setActiveBarStyle] = React.useState<React.CSSProperties>({
@@ -186,9 +186,9 @@ function RangeSelector<DateType extends object = any>(
     if (input) {
       const { offsetWidth, offsetLeft, offsetParent } = input.nativeElement;
       const parentWidth = (offsetParent as HTMLElement)?.offsetWidth || 0;
-      const activeOffset = placementRight ? (parentWidth - offsetWidth - offsetLeft) : offsetLeft;
-      setActiveBarStyle((ori) => ({
-        ...ori,
+      const activeOffset = placementRight ? parentWidth - offsetWidth - offsetLeft : offsetLeft;
+      setActiveBarStyle(({ position }) => ({
+        position,
         width: offsetWidth,
         [offsetUnit]: activeOffset,
       }));
@@ -198,7 +198,7 @@ function RangeSelector<DateType extends object = any>(
 
   React.useEffect(() => {
     syncActiveOffset();
-  }, [activeIndex]);
+  }, [activeIndex, alignedPlacement]);
 
   // ======================== Clear =========================
   const showClear = clearIcon && ((value[0] && !disabled[0]) || (value[1] && !disabled[1]));
