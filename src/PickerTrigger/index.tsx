@@ -81,7 +81,16 @@ function PickerTrigger({
   const dropdownPrefixCls = `${prefixCls}-dropdown`;
 
   const realPlacement = getRealPlacement(placement, direction === 'rtl');
-
+  console.log('realPlacement', realPlacement);
+  console.log(
+    'popupClassName',
+    classNames(popupClassName, {
+      [`${dropdownPrefixCls}-range`]: range,
+      [`${dropdownPrefixCls}-rtl`]: direction === 'rtl',
+    }),
+  );
+  console.log('builtinPlacements', builtinPlacements);
+  console.log('popupStyle', popupStyle);
   return (
     <Trigger
       showAction={[]}

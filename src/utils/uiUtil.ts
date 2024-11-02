@@ -188,19 +188,90 @@ export function elementsContains(
   return elements.some((ele) => ele && ele.contains(target));
 }
 
+/**
+ * 获取真正的placement
+ * @param placement
+ * @param rtl
+ * @returns
+ */
 export function getRealPlacement(placement: string, rtl: boolean) {
   if (placement !== undefined) {
     return placement;
   }
-  return rtl ? 'bottomRight' : 'bottomLeft';
+  const tPlacement = rtl ? 'bottomRight' : 'bottomLeft';
+  return tPlacement;
+  return getRealPlacement001(
+    {
+      bottomLeft: {
+        points: ['tl', 'bl'],
+        offset: [0, 4],
+        overflow: {
+          adjustX: 1,
+          adjustY: 1,
+        },
+      },
+      bottomRight: {
+        points: ['tr', 'br'],
+        offset: [0, 4],
+        overflow: {
+          adjustX: 1,
+          adjustY: 1,
+        },
+      },
+      topLeft: {
+        points: ['bl', 'tl'],
+        offset: [0, -4],
+        overflow: {
+          adjustX: 0,
+          adjustY: 1,
+        },
+      },
+      topRight: {
+        points: ['br', 'tr'],
+        offset: [0, -4],
+        overflow: {
+          adjustX: 0,
+          adjustY: 1,
+        },
+      },
+    },
+    tPlacement,
+  );
+}
+function isPointsEq(a1: string[] = [], a2: string[] = []): boolean {
+  return a1[0] === a2[0] && a1[1] === a2[1];
 }
 
+export function getRealPlacement001(builtinPlacements: any, tPlacement: any): string {
+  const align = builtinPlacements[tPlacement];
+  const { points } = align;
+
+  const placements = Object.keys(builtinPlacements);
+
+  for (let i = 0; i < placements.length; i += 1) {
+    const placement = placements[i];
+    if (isPointsEq(builtinPlacements[placement]?.points, points)) {
+      console.log('11111placement', placement);
+      return placement;
+    }
+  }
+  console.log('11111placement', '');
+  return '';
+}
+
+/**
+ * 获取偏移CSS key值
+ * @param placement
+ * @param rtl
+ * @returns
+ */
 export function getoffsetUnit(placement: string, rtl: boolean) {
   const realPlacement = getRealPlacement(placement, rtl);
+  console.log('getoffsetUnit', placement, rtl, realPlacement);
   const placementRight = realPlacement?.toLowerCase().endsWith('right');
   let offsetUnit = placementRight ? 'insetInlineEnd' : 'insetInlineStart';
   if (rtl) {
-    offsetUnit = ['insetInlineStart', 'insetInlineEnd'].find(unit => unit !== offsetUnit);
+    offsetUnit = ['insetInlineStart', 'insetInlineEnd'].find((unit) => unit !== offsetUnit);
   }
   return offsetUnit;
 }
